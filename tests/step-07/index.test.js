@@ -15,14 +15,15 @@ test('Parse SQL Query', () => {
     const parsed = parseQuery(query);
     expect(parsed).toEqual({
         fields: ['id', 'name'],
+        "isDistinct": false,
         table: 'student',
         "joinCondition": null,
         "joinTable": null,
         "limit": null,
         "joinType": null,
         "groupByFields": null,
-orderByFields: null,
-       "hasAggregateWithoutGroupBy": false,
+        orderByFields: null,
+        "hasAggregateWithoutGroupBy": false,
         whereClauses: []
     });
 });
@@ -43,16 +44,17 @@ test('Parse SQL Query with WHERE Clause', () => {
     expect(parsed).toEqual({
         fields: ['id', 'name'],
         table: 'student',
+        "isDistinct": false,
         whereClauses: [{
-          field: "age",
-          operator: "=",
-          value: "25",
+            field: "age",
+            operator: "=",
+            value: "25",
         }],
         "joinCondition": null,
         "groupByFields": null,
         "limit": null,
-orderByFields: null,
-       "hasAggregateWithoutGroupBy": false,
+        orderByFields: null,
+        "hasAggregateWithoutGroupBy": false,
         "joinTable": null,
         "joinType": null,
     });
@@ -73,13 +75,14 @@ test('Parse SQL Query with Multiple WHERE Clauses', () => {
     expect(parsed).toEqual({
         fields: ['id', 'name'],
         "joinCondition": null,
-          "joinTable": null,
+        "joinTable": null,
         table: 'student',
         "joinType": null,
+        "isDistinct": false,
         "limit": null,
         "groupByFields": null,
-orderByFields: null,
-       "hasAggregateWithoutGroupBy": false,
+        orderByFields: null,
+        "hasAggregateWithoutGroupBy": false,
         whereClauses: [{
             "field": "age",
             "operator": "=",
@@ -113,7 +116,7 @@ test('Execute SQL Query with Not Equal to', async () => {
     expect(result[0]).toHaveProperty('name');
 });
 
-test('Parse SQL Query with INNER JOIN', async () => {/*implement*/});
-test('Parse SQL Query with INNER JOIN and WHERE Clause', async () => {/*implement*/});
-test('Execute SQL Query with INNER JOIN', async () => {/*implement*/});
-test('Execute SQL Query with INNER JOIN and a WHERE Clause', async () => {/*implement*/});
+test('Parse SQL Query with INNER JOIN', async () => {/*implement*/ });
+test('Parse SQL Query with INNER JOIN and WHERE Clause', async () => {/*implement*/ });
+test('Execute SQL Query with INNER JOIN', async () => {/*implement*/ });
+test('Execute SQL Query with INNER JOIN and a WHERE Clause', async () => {/*implement*/ });

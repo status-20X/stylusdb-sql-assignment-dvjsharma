@@ -17,6 +17,7 @@ test('Parse SQL Query', () => {
     expect(parsed).toEqual({
         fields: ['id', 'name'],
         table: 'student',
+        "isDistinct": false,
         whereClauses: [],
         joinCondition: null,
         "limit": null,
@@ -49,6 +50,7 @@ test('Parse SQL Query with WHERE Clause', () => {
             "operator": "=",
             "value": "25",
         }],
+        "isDistinct": false,
         joinCondition: null,
         joinTable: null,
         "limit": null,
@@ -75,6 +77,7 @@ test('Parse SQL Query with Multiple WHERE Clauses', () => {
         fields: ['id', 'name'],
         table: 'student',
         "limit": null,
+        "isDistinct": false,
         whereClauses: [{
             "field": "age",
             "operator": "=",
@@ -124,6 +127,7 @@ test('Parse SQL Query with INNER JOIN', async () => {
         joinTable: 'enrollment',
         joinType: "INNER",
         "limit": null,
+        "isDistinct": false,
         "groupByFields": null,
         orderByFields: null,
         "hasAggregateWithoutGroupBy": false,
@@ -143,6 +147,7 @@ test('Parse SQL Query with INNER JOIN and WHERE Clause', async () => {
         "groupByFields": null,
         "limit": null,
         orderByFields: null,
+        "isDistinct": false,
         "hasAggregateWithoutGroupBy": false,
         joinCondition: { left: 'student.id', right: 'enrollment.student_id' }
     })
