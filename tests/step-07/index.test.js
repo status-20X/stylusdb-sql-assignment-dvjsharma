@@ -19,6 +19,8 @@ test('Parse SQL Query', () => {
         "joinCondition": null,
         "joinTable": null,
         "joinType": null,
+        "groupByFields": null,
+       "hasAggregateWithoutGroupBy": false,
         whereClauses: []
     });
 });
@@ -45,6 +47,8 @@ test('Parse SQL Query with WHERE Clause', () => {
           value: "25",
         }],
         "joinCondition": null,
+        "groupByFields": null,
+       "hasAggregateWithoutGroupBy": false,
         "joinTable": null,
         "joinType": null,
     });
@@ -68,6 +72,8 @@ test('Parse SQL Query with Multiple WHERE Clauses', () => {
           "joinTable": null,
         table: 'student',
         "joinType": null,
+        "groupByFields": null,
+       "hasAggregateWithoutGroupBy": false,
         whereClauses: [{
             "field": "age",
             "operator": "=",
