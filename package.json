@@ -1,7 +1,7 @@
 {
   "name": "stylusdb-sql",
   "version": "0.1.6",
-  "description": "A minimal SQL based DB based on CSV files. For educational purposes only.",
+  "description": "Github Classroom: A minimal SQL based DB based on CSV files. For educational purposes only.",
   "main": "./src/index.js",
   "directories": {
     "doc": "docs"
@@ -35,7 +35,7 @@
     "stylusdb-cli": "node ./src/cli.js"
   },
   "keywords": [],
-  "author": "Chakshu Gautam",
+  "author": "Divij Sharma",
   "license": "ISC",
   "devDependencies": {
     "jest": "^29.7.0"
