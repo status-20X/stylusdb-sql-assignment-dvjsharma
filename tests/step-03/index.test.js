@@ -17,9 +17,11 @@ test('Parse SQL Query', () => {
         table: 'student',
         "joinCondition": null,
         "groupByFields": null,
+orderByFields: null,
        "hasAggregateWithoutGroupBy": false,
         "joinTable": null,
         "joinType": null,
+        "limit": null,
         whereClauses: []
     });
 });

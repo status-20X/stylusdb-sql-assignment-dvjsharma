@@ -1,5 +1,5 @@
 const readCSV = require('../../src/csvReader');
-const {parseQuery, parseJoinClause} = require('../../src/queryParser');
+const { parseQuery, parseJoinClause } = require('../../src/queryParser');
 const executeSELECTQuery = require('../../src/index');
 
 test('Read CSV File', async () => {
@@ -263,6 +263,7 @@ test('Parse SQL Query', () => {
         fields: ['id', 'name'],
         table: 'student',
         whereClauses: [],
+        "limit": null,
         joinCondition: null,
         joinTable: null,
         joinType: null,
@@ -278,6 +279,7 @@ test('Parse SQL Query with WHERE Clause', () => {
     expect(parsed).toEqual({
         fields: ['id', 'name'],
         table: 'student',
+        "limit": null,
         whereClauses: [{
             "field": "age",
             "operator": "=",
@@ -298,6 +300,7 @@ test('Parse SQL Query with Multiple WHERE Clauses', () => {
     expect(parsed).toEqual({
         fields: ['id', 'name'],
         table: 'student',
+        "limit": null,
         whereClauses: [{
             "field": "age",
             "operator": "=",
@@ -325,6 +328,7 @@ test('Parse SQL Query with INNER JOIN', async () => {
         whereClauses: [],
         joinTable: 'enrollment',
         joinType: "INNER",
+        "limit": null,
         joinCondition: { left: 'student.id', right: 'enrollment.student_id' },
         groupByFields: null,
         hasAggregateWithoutGroupBy: false,
@@ -343,6 +347,7 @@ test('Parse SQL Query with INNER JOIN and WHERE Clause', async () => {
         joinType: "INNER",
         joinCondition: { left: 'student.id', right: 'enrollment.student_id' },
         groupByFields: null,
+        "limit": null,
         hasAggregateWithoutGroupBy: false,
         "orderByFields": null
     })
@@ -397,6 +402,7 @@ test('Parse LEFT Join Query Completely', () => {
         fields: ['student.name', 'enrollment.course'],
         table: 'student',
         whereClauses: [],
+        "limit": null,
         joinType: 'LEFT',
         joinTable: 'enrollment',
         joinCondition: { left: 'student.id', right: 'enrollment.student_id' },
@@ -414,6 +420,7 @@ test('Parse LEFT Join Query Completely', () => {
         table: 'student',
         whereClauses: [],
         joinType: 'RIGHT',
+        "limit": null,
         joinTable: 'enrollment',
         joinCondition: { left: 'student.id', right: 'enrollment.student_id' },
         groupByFields: null,
@@ -431,6 +438,7 @@ test('Parse SQL Query with LEFT JOIN with a WHERE clause filtering the main tabl
         "joinTable": "enrollment",
         "joinType": "LEFT",
         "table": "student",
+"limit": null,
         "whereClauses": [{ "field": "student.age", "operator": ">", "value": "22" }],
         groupByFields: null,
         hasAggregateWithoutGroupBy: false,
@@ -447,6 +455,7 @@ test('Parse SQL Query with LEFT JOIN with a WHERE clause filtering the join tabl
         "joinTable": "enrollment",
         "joinType": "LEFT",
         "table": "student",
+"limit": null,
         "whereClauses": [{ "field": "enrollment.course", "operator": "=", "value": "'Physics'" }],
         groupByFields: null,
         hasAggregateWithoutGroupBy: false,
@@ -463,6 +472,7 @@ test('Parse SQL Query with RIGHT JOIN with a WHERE clause filtering the main tab
         "joinTable": "enrollment",
         "joinType": "RIGHT",
         "table": "student",
+"limit": null,
         "whereClauses": [{ "field": "student.age", "operator": "<", "value": "25" }],
         groupByFields: null,
         hasAggregateWithoutGroupBy: false,
@@ -479,6 +489,8 @@ test('Parse SQL Query with RIGHT JOIN with a WHERE clause filtering the join tab
         "joinTable": "enrollment",
         "joinType": "RIGHT",
         "table": "student",
+"limit": null,
+        "limit": null,
         "whereClauses": [{ "field": "enrollment.course", "operator": "=", "value": "'Chemistry'" }],
         groupByFields: null,
         hasAggregateWithoutGroupBy: false,
@@ -499,6 +511,7 @@ test('Parse COUNT Aggregate Query', () => {
         "joinCondition": null,
         "joinTable": null,
         "joinType": null,
+        "limit": null,
         "orderByFields": null
     });
 });
@@ -516,6 +529,7 @@ test('Parse SUM Aggregate Query', () => {
         "joinCondition": null,
         "joinTable": null,
         "joinType": null,
+        "limit": null,
         "orderByFields": null
     });
 });
@@ -532,6 +546,7 @@ test('Parse AVG Aggregate Query', () => {
         "joinCondition": null,
         "joinTable": null,
         "joinType": null,
+        "limit": null,
         "orderByFields": null
     });
 });
@@ -548,6 +563,7 @@ test('Parse MIN Aggregate Query', () => {
         "joinCondition": null,
         "joinTable": null,
         "joinType": null,
+        "limit": null,
         "orderByFields": null
     });
 });
@@ -564,6 +580,7 @@ test('Parse MAX Aggregate Query', () => {
         "joinCondition": null,
         "joinTable": null,
         "joinType": null,
+        "limit": null,
         "orderByFields": null
     });
 });
@@ -578,6 +595,7 @@ test('Parse basic GROUP BY query', () => {
         groupByFields: ['age'],
         joinType: null,
         joinTable: null,
+        "limit": null,
         joinCondition: null,
         hasAggregateWithoutGroupBy: false,
         orderByFields: null
@@ -594,6 +612,7 @@ test('Parse GROUP BY query with WHERE clause', () => {
         groupByFields: ['age'],
         joinType: null,
         joinTable: null,
+        "limit": null,
         joinCondition: null,
         hasAggregateWithoutGroupBy: false,
         orderByFields: null
@@ -610,6 +629,7 @@ test('Parse GROUP BY query with multiple fields', () => {
         groupByFields: ['student_id', 'course'],
         joinType: null,
         joinTable: null,
+        "limit": null,
         joinCondition: null,
         hasAggregateWithoutGroupBy: false,
         orderByFields: null
@@ -625,6 +645,7 @@ test('Parse GROUP BY query with JOIN and WHERE clauses', () => {
         whereClauses: [{ field: 'enrollment.course', operator: '=', value: '"Mathematics"' }],
         groupByFields: ['student.name'],
         joinType: 'INNER',
+        "limit": null,
         joinTable: 'enrollment',
         joinCondition: {
             left: 'student.id',
