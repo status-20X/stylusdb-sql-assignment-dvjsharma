@@ -80,11 +80,11 @@ function parseQuery(query) {
 			fields: fields.split(',').map(field => field.trim()),
 			table: table.trim(),
 			whereClauses,
+			joinType,
 			joinTable,
 			joinCondition,
 			groupByFields,
 			orderByFields,
-			joinType,
 			hasAggregateWithoutGroupBy,
 			limit,
 			isDistinct
@@ -122,8 +122,8 @@ function parseJoinClause(query) {
 
 	if (joinMatch) {
 		return {
-			joinTable: joinMatch[2].trim(),
 			joinType: joinMatch[1].trim(),
+			joinTable: joinMatch[2].trim(),
 			joinCondition: {
 				left: joinMatch[3].trim(),
 				right: joinMatch[4].trim()
@@ -132,10 +132,9 @@ function parseJoinClause(query) {
 	}
 
 	return {
-
-		joinCondition: null,
 		joinType: null,
 		joinTable: null,
+		joinCondition: null
 	};
 }
 

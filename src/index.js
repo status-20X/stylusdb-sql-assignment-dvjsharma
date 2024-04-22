@@ -44,14 +44,14 @@ function performRightJoin(data, joinData, joinCondition, fields, table) {
 	// Cache the structure of a main table row (keys only)
 	const mainTableRowStructure = data.length > 0 ? Object.keys(data[0]).reduce((acc, key) => {
 		acc[key] = null; // Set all values to null initially
-		return acc;
+		return (acc);
 	}, {}) : {};
 
 	return joinData.map(joinRow => {
 		const mainRowMatch = data.find(mainRow => {
 			const mainValue = getValueFromRow(mainRow, joinCondition.left);
 			const joinValue = getValueFromRow(joinRow, joinCondition.right);
-			return mainValue === joinValue;
+			return (mainValue === joinValue);
 		});
 
 		// Use the cached structure if no match is found
@@ -103,11 +103,12 @@ function evaluateCondition(row, clause) {
 
 	switch (operator) {
 		case '=': return rowValue === conditionValue;
+
+		case '<=': return rowValue <= conditionValue;
 		case '!=': return rowValue !== conditionValue;
 		case '>': return rowValue > conditionValue;
 		case '<': return rowValue < conditionValue;
 		case '>=': return rowValue >= conditionValue;
-		case '<=': return rowValue <= conditionValue;
 		default: throw new Error(`Unsupported operator: ${operator}`);
 	}
 }
@@ -117,7 +118,7 @@ function parseValue(value) {
 
 	// Return null or undefined as is
 	if (value === null || value === undefined) {
-		return value;
+		return (value);
 	}
 
 	// If the value is a string enclosed in single or double quotes, remove them
@@ -130,7 +131,7 @@ function parseValue(value) {
 		return Number(value);
 	}
 	// Assume value is a string if not a number
-	return value;
+	return (value);
 }
 
 function applyGroupBy(data, groupByFields, aggregateFunctions) {
@@ -155,15 +156,16 @@ function applyGroupBy(data, groupByFields, aggregateFunctions) {
 				const value = parseFloat(row[aggField]);
 
 				switch (aggFunc.toUpperCase()) {
-					case 'SUM':
-						groupResults[groupKey].sums[aggField] = (groupResults[groupKey].sums[aggField] || 0) + value;
-						break;
 					case 'MIN':
 						groupResults[groupKey].mins[aggField] = Math.min(groupResults[groupKey].mins[aggField] || value, value);
 						break;
 					case 'MAX':
 						groupResults[groupKey].maxes[aggField] = Math.max(groupResults[groupKey].maxes[aggField] || value, value);
 						break;
+					case 'SUM':
+						groupResults[groupKey].sums[aggField] = (groupResults[groupKey].sums[aggField] || 0) + value;
+						break;
+
 					// Additional aggregate functions can be added here
 				}
 			}
@@ -183,21 +185,22 @@ function applyGroupBy(data, groupByFields, aggregateFunctions) {
 					case 'SUM':
 						finalGroup[func] = group.sums[aggField];
 						break;
+
+					case 'COUNT':
+						finalGroup[func] = group.count;
+						break;
 					case 'MIN':
 						finalGroup[func] = group.mins[aggField];
 						break;
 					case 'MAX':
 						finalGroup[func] = group.maxes[aggField];
 						break;
-					case 'COUNT':
-						finalGroup[func] = group.count;
-						break;
 					// Additional aggregate functions can be handled here
 				}
 			}
 		});
 
-		return finalGroup;
+		return (finalGroup);
 	});
 }
 
@@ -211,15 +214,16 @@ async function executeSELECTQuery(query) {
 		if (joinTable && joinCondition) {
 			const joinData = await readCSV(`${joinTable}.csv`);
 			switch (joinType.toUpperCase()) {
-				case 'INNER':
-					data = performInnerJoin(data, joinData, joinCondition, fields, table);
-					break;
 				case 'LEFT':
 					data = performLeftJoin(data, joinData, joinCondition, fields, table);
 					break;
 				case 'RIGHT':
 					data = performRightJoin(data, joinData, joinCondition, fields, table);
 					break;
+				case 'INNER':
+					data = performInnerJoin(data, joinData, joinCondition, fields, table);
+					break;
+
 				default:
 					throw new Error(`Unsupported JOIN type: ${joinType}`);
 			}
@@ -239,22 +243,22 @@ async function executeSELECTQuery(query) {
 				if (match) {
 					const [, aggFunc, aggField] = match;
 					switch (aggFunc.toUpperCase()) {
-
-						case 'MIN':
-							result[field] = Math.min(...filteredData.map(row => parseFloat(row[aggField])));
-							break;
 						case 'COUNT':
 							result[field] = filteredData.length;
-							break;
-						case 'SUM':
-							result[field] = filteredData.reduce((acc, row) => acc + parseFloat(row[aggField]), 0);
 							break;
 						case 'AVG':
 							result[field] = filteredData.reduce((acc, row) => acc + parseFloat(row[aggField]), 0) / filteredData.length;
 							break;
+						case 'MIN':
+							result[field] = Math.min(...filteredData.map(row => parseFloat(row[aggField])));
+							break;
 						case 'MAX':
 							result[field] = Math.max(...filteredData.map(row => parseFloat(row[aggField])));
 							break;
+						case 'SUM':
+							result[field] = filteredData.reduce((acc, row) => acc + parseFloat(row[aggField]), 0);
+							break;
+
 						// Additional aggregate functions can be handled here
 					}
 				}
@@ -270,8 +274,9 @@ async function executeSELECTQuery(query) {
 			if (orderByFields) {
 				orderedResults = groupResults.sort((a, b) => {
 					for (let { fieldName, order } of orderByFields) {
-						if (a[fieldName] < b[fieldName]) return order === 'ASC' ? -1 : 1;
 						if (a[fieldName] > b[fieldName]) return order === 'ASC' ? 1 : -1;
+
+						if (a[fieldName] < b[fieldName]) return order === 'ASC' ? -1 : 1;
 					}
 					return 0;
 				});
@@ -287,8 +292,9 @@ async function executeSELECTQuery(query) {
 			if (orderByFields) {
 				orderedResults = groupResults.sort((a, b) => {
 					for (let { fieldName, order } of orderByFields) {
-						if (a[fieldName] < b[fieldName]) return order === 'ASC' ? -1 : 1;
 						if (a[fieldName] > b[fieldName]) return order === 'ASC' ? 1 : -1;
+
+						if (a[fieldName] < b[fieldName]) return order === 'ASC' ? -1 : 1;
 					}
 					return 0;
 				});
