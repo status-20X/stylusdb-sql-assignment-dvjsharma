@@ -1,6 +1,4 @@
-/*
-Creating a Query Parser which can parse SQL `SELECT` Queries only.
-// */
+
 function parseSelectQuery(query) {
 	try {
 
@@ -81,13 +79,14 @@ function parseSelectQuery(query) {
 			table: table.trim(),
 			whereClauses,
 			joinType,
+
+			isDistinct,
 			joinTable,
 			joinCondition,
 			groupByFields,
 			orderByFields,
 			hasAggregateWithoutGroupBy,
 			limit,
-			isDistinct
 		};
 	} catch (error) {
 		throw new Error(`Query parsing error: ${error.message}`);
@@ -122,20 +121,22 @@ function parseJoinClause(query) {
 
 	if (joinMatch) {
 		return {
-			joinType: joinMatch[1].trim(),
+
 			joinTable: joinMatch[2].trim(),
+			joinType: joinMatch[1].trim(),
 			joinCondition: {
+				right: joinMatch[4].trim(),
 				left: joinMatch[3].trim(),
-				right: joinMatch[4].trim()
+
 			}
 		};
 	}
 
 	return {
-
-		joinCondition: null,
-		joinType: null,
 		joinTable: null,
+		joinCondition: null,
+		joinType: null
+
 	};
 }
 
@@ -156,4 +157,26 @@ function parseInsertQuery(query) {
 	};
 }
 
-module.exports = { parseSelectQuery, parseJoinClause, parseInsertQuery };
+function parseDeleteQuery(query) {
+	const deleteRegex = /DELETE FROM (\w+)( WHERE (.*))?/i;
+	const match = query.match(deleteRegex);
+
+	if (!match) {
+		throw new Error("Invalid DELETE syntax.");
+	}
+
+	const [, table, , whereString] = match;
+	let whereClauses = [];
+	if (whereString) {
+		whereClauses = parseWhereClause(whereString);
+	}
+
+	return {
+		type: 'DELETE',
+		table: table.trim(),
+		whereClauses
+	};
+}
+
+
+module.exports = { parseSelectQuery, parseJoinClause, parseInsertQuery, parseDeleteQuery };
